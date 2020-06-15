@@ -120,7 +120,7 @@ stages:
       displayName: 'Azure Key Vault: boa-auth-kv-$(Release.EnvironmentName)'
       inputs:
         azureSubscription: $(azureSubscriptionEndpoint)
-        KeyVaultName: '$(Key-Vault-Dev)'
+        KeyVaultName: '$(KeyVaultDev)'
 
   # Login into Azure
     - task: Docker@1
@@ -131,14 +131,24 @@ stages:
         azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
         azureContainerRegistry: $(azureContainerRegistry)
 
+    - task: DockerCompose@0
+      displayName: 'Migration local sql-server'
+      inputs:
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/src/db/docker-compose.testdb.yml'
+        dockerComposeCommand: 'up --build -d'
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'sleep 10'
+
     - task: AzureCLI@1
       displayName: 'Integration Test'
       inputs:
         azureSubscription: $(azureSubscriptionEndpoint)
         scriptLocation: inlineScript
         inlineScript: |
-         keyvaultname=$(Key-Vault-Dev)
-         dockerimage=elevacontainerregistry.azurecr.io/$(Build.Repository.Name):$(Build.BuildNumber)
+         keyvaultname=$(KeyVaultDev)
+         dockerimage=elevacontainerregistry.azurecr.io/$(Build.Repository.Name):v$(Build.BuildNumber)
          values="$(az keyvault secret list --vault-name $keyvaultname --query '[*].id' --o tsv)"
          for item in $values
          do

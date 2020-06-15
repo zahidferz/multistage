@@ -149,15 +149,21 @@ stages:
         inlineScript: |
          keyvaultname=$(KeyVaultDev)
          dockerimage=elevacontainerregistry.azurecr.io/$(Build.Repository.Name):v$(Build.BuildNumber)
-         values="$(az keyvault secret list --vault-name $keyvaultname --query '[*].id' --o tsv)"
+         values="$(az keyvault secret list --vault-name $keyvaultname --query '[*].id' -o tsv)"
          for item in $values
          do
            items=${item##*/} 
-           secretstore=$(az keyvault secret show --vault-name $keyvaultname --name $items --query value --o tsv)
+           secretstore=$(az keyvault secret show --vault-name $keyvaultname --name $items --query value -o tsv)
            valuestore=${items//[-]/_}
            echo $valuestore=$secretstore
          done >> $keyvaultname.env 
          docker run --net=netest --env-file $keyvaultname.env  -v $(System.DefaultWorkingDirectory):/app/test_results $dockerimage npm run integration-tests
+    
+    - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
+      inputs:
+        testResultsFiles: 'integration-test-results.xml'
+        failTaskOnFailedTests: true
 
 
     

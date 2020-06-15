@@ -107,3 +107,6 @@ stages:
     - bash: |
         sleep 10   
       displayName: Wait till Image is Up
+
+- stage: Deploy to Dev
+  

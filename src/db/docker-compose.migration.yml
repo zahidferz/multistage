@@ -1,0 +1,22 @@
+version: '3'
+services:
+  # MIGRATION CONTAINER (EXECUTES MIGRATION TO SQL SERVER)
+  flyway:
+    image: boxfuse/flyway
+    command: >
+      -url=jdbc:sqlserver://${SQL_HOST}:${SQL_PORT};databaseName='${SQL_DATABASE}'
+      -user='${SQL_USER}'
+      -password=${SQL_PASS}
+      -connectRetries=60
+      migrate
+    volumes:
+      - ./migrations:/flyway/sql
+## Run in  bash
+# SQL_DATABASE=database_name SQL_HOST=host_name SQL_PORT=1433 SQL_USER=user_name SQL_PASS=mypassword docker-compose -f "db\docker-compose.migration.yml" up --build
+
+# UNIX
+# SQL_DATABASE=gx-boa-ms-account-provisioning-local SQL_HOST=sql-server SQL_PORT=1433 SQL_USER=sa SQL_PASS=D3v3lopm3ntGx docker-compose -f "src/db/docker-compose.migration.yml" up --build
+# SQL_DATABASE=gx-boa-ms-account-provisioning-test SQL_HOST=sql-server SQL_PORT=1433 SQL_USER=sa SQL_PASS=D3v3lopm3ntGx docker-compose -f "src/db/docker-compose.migration.yml" up --build
+
+## Run in powershell
+# $env:SQL_DATABASE='database_name';$env:SQL_HOST='host_name';$env:SQL_PORT='1433';$env:SQL_USER='user_name';$env:SQL_PASS='mypassword'; docker-compose -f "db\docker-compose.migration.yml" up --build

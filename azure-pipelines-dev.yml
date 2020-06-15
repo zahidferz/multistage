@@ -65,7 +65,7 @@ stages:
     - task: Docker@1
       displayName: 'Running unit tests'
       inputs:
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
         azureContainerRegistry: $(azureContainerRegistry)
         imageName: $(azureContainerRegistry)/$(Build.Repository.Name):v$(buildVersion)    
         command: run
@@ -138,7 +138,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
          keyvaultname=$(Key-Vault-Dev)
-         dockerimage=elevacontainerregistry.azurecr.io/$(Build.Repository.Name):$(Build.BuildId)
+         dockerimage=elevacontainerregistry.azurecr.io/$(Build.Repository.Name):$(Build.BuildNumber)
          values="$(az keyvault secret list --vault-name $keyvaultname --query '[*].id' --o tsv)"
          for item in $values
          do

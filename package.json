@@ -1,0 +1,99 @@
+{
+  "name": "gx-boa-ms-account-provisioning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gestionix/gx-boa-ms-account-provisioning"
+  },
+  "scripts": {
+    "clean": "rm -rf build && rm -rf test_results && mkdir build",
+    "copy-tests-resources": "find src/tests ! -name '*.js' -type f -exec cp '{}' build/'{}' ';'",
+    "babel-transpile": "babel -d ./build . -s --ignore node_modules",
+    "copy-migration-files": "cp -R db/ build/db",
+    "start": "node cluster.js",
+    "build": "npm run clean && npm run babel-transpile && npm run copy-migration-files && npm run copy-tests-resources",
+    "dev": "nodemon --exec babel-node src/index.js | pino-colada",
+    "test": "jest --detectOpenHandles --runInBand --config src/tests/jest.config.default.json",
+    "unit-tests": "jest --ci --detectOpenHandles --runInBand --forceExit --config src/tests/jest.config.unit.json",
+    "integration-tests": "jest --ci --detectOpenHandles --runInBand --forceExit --config src/tests/jest.config.integration.json",
+    "lint": "eslint 'src/**/*.js' --fix",
+    "format": "prettier-eslint 'server/**/*.{js,json}' --write",
+    "coverage": "NODE_ENV=test jest --collectCoverageFrom=src/**.js --collectCoverageFrom=!src/index.js --coverage src",
+    "repl": "NODE_OPTIONS=--experimental-repl-await node repl.js"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --fix",
+      "prettier-eslint --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "author": "",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/preset-env": "^7.9.6",
+    "@types/jest": "^25.2.3",
+    "babel-jest": "^26.0.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-import-resolver-babel-plugin-root-import": "^1.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.13.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "lint-staged": "^10.2.4",
+    "nodemon": "^2.0.4",
+    "pino-colada": "^1.6.1",
+    "pino-pretty": "^4.0.0",
+    "prettier-eslint-cli": "^5.0.0",
+    "superagent": "^5.2.2",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "@hapi/joi": "^17.1.1",
+    "@sentry/node": "^5.15.5",
+    "@types/node": "^14.0.9",
+    "applicationinsights": "^1.7.5",
+    "axios": "^0.19.2",
+    "babel-plugin-root-import": "^6.4.1",
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "cluster": "^0.7.7",
+    "core-js": "^3.6.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-pino-logger": "^5.0.0",
+    "gx-node-api-errors": "^0.2.8",
+    "helmet": "^3.22.0",
+    "i": "^0.3.6",
+    "jest": "^24.5.0",
+    "jest-chain": "^1.1.5",
+    "jest-junit": "^10.0.0",
+    "moment-timezone": "^0.5.31",
+    "mssql": "^6.2.0",
+    "newrelic": "^6.8.0",
+    "node-cron": "^2.0.3",
+    "npm": "^6.14.5",
+    "pino": "^6.2.1",
+    "querystring": "^0.2.0",
+    "random-number-csprng": "^1.0.2",
+    "reflect-metadata": "^0.1.13",
+    "regenerator-runtime": "^0.13.5",
+    "twilio": "^3.44.0",
+    "urlencode": "^1.1.0"
+  }
+}

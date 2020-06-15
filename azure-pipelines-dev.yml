@@ -108,5 +108,5 @@ stages:
         sleep 10   
       displayName: Wait till Image is Up
 
-- stage: Deploy to Dev
+- stage: Deploy_Dev
   

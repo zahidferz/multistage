@@ -37,7 +37,7 @@ stages:
       condition: always()
       inputs:
         command: login
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
         azureContainerRegistry: $(azureContainerRegistry)
 
     # Setting name, commit and date
@@ -55,7 +55,7 @@ stages:
       displayName: Build image
       inputs:
         command: build
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
         azureContainerRegistry: $(azureContainerRegistry)    
         dockerFile: Dockerfile
         arguments: --build-arg NAMET=$(NAMET) --build-arg VERSIONT=$(buildVersion) --build-arg COMMITT=$(COMMITT) --build-arg DATET=$(DATET)
@@ -89,7 +89,7 @@ stages:
       displayName: Push image to Azure container registry
       inputs:
         command: push
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
         azureContainerRegistry: $(azureContainerRegistry)
         imageName: $(Build.Repository.Name):v$(buildVersion)
 
@@ -99,7 +99,7 @@ stages:
       condition: always()
       inputs:
         command: logout
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
         azureContainerRegistry: $(azureContainerRegistry)
 
     # sleep until release
@@ -109,4 +109,56 @@ stages:
       displayName: Wait till Image is Up
 
 - stage: Deploy_Dev
+  displayName: 'Deploy to Dev'
+  jobs:
+
+  - job: Integration_Migration
+    displayName: 'Integration and Migration'
+    steps:
+
+    - task: AzureKeyVault@1
+      displayName: 'Azure Key Vault: boa-auth-kv-$(Release.EnvironmentName)'
+      inputs:
+        azureSubscription: $(azureSubscriptionEndpoint)
+        KeyVaultName: '$(Key-Vault-Dev)'
+
+  # Login into Azure
+    - task: Docker@1
+      displayName: Login into Azure container registry
+      condition: always()
+      inputs:
+        command: login
+        azureSubscriptionEndpoint: $(azureSubscriptionContainerRegistry)
+        azureContainerRegistry: $(azureContainerRegistry)
+
+    - task: AzureCLI@1
+      displayName: 'Integration Test'
+      inputs:
+        azureSubscription: $(azureSubscriptionEndpoint)
+        scriptLocation: inlineScript
+        inlineScript: |
+         keyvaultname=$(Key-Vault-Dev)
+         dockerimage=elevacontainerregistry.azurecr.io/$(Build.Repository.Name):$(Build.BuildId)
+         values="$(az keyvault secret list --vault-name $keyvaultname --query '[*].id' --o tsv)"
+         for item in $values
+         do
+           items=${item##*/} 
+           secretstore=$(az keyvault secret show --vault-name $keyvaultname --name $items --query value --o tsv)
+           valuestore=${items//[-]/_}
+           echo $valuestore=$secretstore
+         done >> $keyvaultname.env 
+         docker run --net=netest --env-file $keyvaultname.env  -v $(System.DefaultWorkingDirectory):/app/test_results $dockerimage npm run integration-tests
+
+
+    
+  
+
+    
+
+
+    
+
+
+
+
   

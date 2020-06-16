@@ -1,12 +1,14 @@
+
+name: $(SourceBranchName)_$(date:yyyyMMdd)
+pool:
+  vmImage: 'Ubuntu-16.04'
+
 resources:      
   repositories: 
   - repository: NodeYaml
     name: gx-devops-yamls/NodeYaml
     type: git 
     ref: master #branch name
-
-pool:
-  vmImage: 'Ubuntu-16.04'
 
 trigger: none
 extends:

@@ -1,12 +1,14 @@
 
-name: $(SourceBranchName)_$(date:yyyyMMdd)
+name: $(SourceBranchName)
 pool:
   vmImage: 'Ubuntu-16.04'
 
 trigger:
   branches:
     include:
-    - '*'
+    - master
+    - develop
+pr: none
 
 resources:      
   repositories: 
@@ -15,6 +17,7 @@ resources:
     type: git 
     ref: master #branch name
 
-
 extends:
   template: NodePipeline.yaml@NodeYaml
+
+

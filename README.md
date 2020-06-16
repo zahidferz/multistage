@@ -29,7 +29,7 @@
 * [Contact and authors](#contact-and-authors)
 
 ## About The Project
-
+[![Build Status](https://dev.azure.com/gestionix-boa/gx-sandbox-pipeline/_apis/build/status/Reference-Multistage.yaml?branchName=develop)](https://dev.azure.com/gestionix-boa/gx-sandbox-pipeline/_build/latest?definitionId=202&branchName=develop)
 
 ### Built With
 *This section should list **any major frameworks** that you built your project using. Here are a few examples.*

@@ -6,7 +6,8 @@ pool:
 trigger:
   branches:
     include:
-    - '*'
+    - master
+    - develop
 pr: none
 
 resources:      

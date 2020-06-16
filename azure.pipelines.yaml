@@ -1,5 +1,5 @@
 
-name: $(SourceBranchName)_$(date:yyyyMMdd)
+name: $(SourceBranchName)
 pool:
   vmImage: 'Ubuntu-16.04'
 

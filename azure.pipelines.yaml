@@ -5,6 +5,9 @@ resources:
     type: git 
     ref: master #branch name
 
+pool:
+  vmImage: 'Ubuntu-16.04'
+
 trigger: none
 extends:
   template: NodePipeline.yaml@NodeYaml

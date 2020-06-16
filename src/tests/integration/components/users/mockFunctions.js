@@ -327,7 +327,72 @@ async function mockUnexpectedError() {
   });
 }
 
+/**
+ * Returns a mocked response for
+ * a error on users microservice
+ * because of existent user on get by mobile phone
+ * @returns {Promise}
+ */
+async function mockErrorGetUserByPhoneRequest() {
+  const mockResponse = {
+    response: {
+      data: {
+        message: 'Unprocessable entity error',
+        errors: [
+          {
+            field: 'mobilePhone',
+            fieldValue: '15527258173',
+            errorCode: 18,
+            errorType: 'error',
+            errorMessage: 'The specified mobile phone is already registered',
+          },
+        ],
+        statusCode: 422,
+        microservice: 'gx-boa-ms-users',
+      },
+    },
+  };
+  return new Promise((resolve, reject) => {
+    reject(mockResponse);
+  });
+}
+
+/**
+ * Returns a mocked response for
+ * get user data by mobile phone
+ * @returns {Promise}
+ */
+async function mockGetUserInfoInexistedRequest() {
+  const mockResponse = {
+    data: false,
+  };
+  return new Promise((resolve) => {
+    resolve(mockResponse);
+  });
+}
+
+/**
+ * Returns a mocked response for
+ * get user data by mobile phone
+ * @returns {Promise}
+ */
+async function mockGetUserInfoExistedRequest() {
+  const mockResponse = {
+    data: {
+      mobilePhone: '15527258173',
+      email: 'gr.yocelin+apms11@gmail.com',
+      UserStatusId: 1,
+    },
+  };
+  return new Promise((resolve, reject) => {
+    reject(mockResponse);
+  });
+}
+
 export {
+  mockErrorGetUserByPhoneRequest,
+  mockGetUserInfoExistedRequest,
+  mockGetUserInfoInexistedRequest,
   mockActivateInexistentUserRequest,
   mockEmailAlredyRegisteredRequest,
   mockExternalUsersNotExpectedError,

@@ -1,5 +1,7 @@
 import express from 'express';
 
+import logInController from '~/src/api/v1/controllers/auth';
+
 import {
   createLeadController,
   confirmLeadController,
@@ -26,5 +28,6 @@ router.post(
 router.post('/api/v1/companies', createCompanyController);
 router.patch('/api/v1/companies', updateCompanyController);
 router.post('/api/v1/leads/confirm_account', confirmLeadController);
+router.post('/api/v1/log_in', logInController);
 
 export default router;

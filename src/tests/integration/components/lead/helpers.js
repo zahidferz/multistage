@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 
 import { createDbConnection } from '~/src/components/utils/db';
 import SqlManager from '~/src/tests/SqlManagerTest';
-import generateRandomCode from '~/src/components/utils/random';
 
 async function dummyRemoveLead({ mobilePhone, countryCallingCode }) {
   try {
@@ -23,16 +22,15 @@ async function dummyAddLead() {
   try {
     const sqlManager = new SqlManager();
     const connection = await createDbConnection(sqlManager);
-    const randomConfirmationCode = await generateRandomCode();
     const result = await connection.request().query(`
     SET NOCOUNT ON
     INSERT INTO [dbo].[Lead] VALUES(
-      '9999999999',
+      '2345099991',
       '+1',
       'Usuario',
       'Test',
       'test+001@gmail.com',
-      '${randomConfirmationCode}'
+      '1234'
       ,0,
       0,
       '2020-02-24T12:00:00.000',

@@ -176,9 +176,13 @@ async function confirmLeadController(req, res, next) {
   try {
     await validateSchemaForRoutes(req, confirmAccountSchemaEnpoint());
     const sqlmanager = req.app.locals.SqlManager;
+    const leadInput = {
+      ...req.body,
+    };
+    leadInput.confirmationCode = parseInt(leadInput.confirmationCode, 10);
     const leadInformation = await validateLeadForConfirmation(
       sqlmanager,
-      req.body,
+      leadInput,
     );
 
     const user = await createUser(leadInformation);

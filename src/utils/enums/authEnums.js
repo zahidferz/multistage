@@ -9,4 +9,5 @@ export default {
   UserNotFound: 17,
   PasswordStrengthError: 18,
   UserAlreadyExist: 19,
+  PasswordError: 20,
 };

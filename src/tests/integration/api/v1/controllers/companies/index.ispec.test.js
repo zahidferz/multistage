@@ -9,6 +9,7 @@ import mockUpdateCompany from './mockData';
 import {
   mockAuthorizationError,
   mockIntrospectTokenResponse,
+  mockAuthErrorTranslateResponse,
 } from '~/src/tests/integration/components/auth/mockFunctions';
 import {
   mockNonExistentCompanyResponse,
@@ -40,6 +41,7 @@ describe('Update company - /api/v1/companies', () => {
   test('throws an authorization error when Auth header is not present', async () => {
     const mockExternalResponse = jest
       .spyOn(externalRequest, 'execute')
+      .mockImplementationOnce(mockAuthErrorTranslateResponse)
       .mockImplementationOnce(mockIntrospectTokenResponse);
 
     const { status, body } = await request(app)
@@ -48,7 +50,7 @@ describe('Update company - /api/v1/companies', () => {
       .send(mockUpdateCompany);
     expect(status).toEqual(400);
     expect(body).toStrictEqual({
-      errors: [
+      error: [
         {
           errorCode: 14,
           errorMessage: 'Authorization missing for service',
@@ -57,12 +59,12 @@ describe('Update company - /api/v1/companies', () => {
           fieldValue: null,
         },
       ],
-      message: 'Bad Request Error',
+      message: '',
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(0);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(1);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an authorization error when Auth service throws an 401 http status response', async () => {
@@ -77,13 +79,14 @@ describe('Update company - /api/v1/companies', () => {
       .send(mockUpdateCompany);
     expect(status).toEqual(401);
     expect(body).toStrictEqual({
-      message: 'Unauthorized',
+      language: 'es_mx',
+      message: 'Se ha producido un error inesperado en el servicio',
       errors: [],
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(1);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(2);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an External microservice error when the getUserByEmail function gets an unexpected error', async () => {
@@ -99,13 +102,14 @@ describe('Update company - /api/v1/companies', () => {
       .send(mockUpdateCompany);
     expect(status).toEqual(500);
     expect(body).toStrictEqual({
-      message: 'The application has encountered an unknown error',
+      language: 'es_mx',
+      message: 'Se ha producido un error inesperado en el servicio',
       errors: [],
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(2);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(3);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an Unprocessable Entity error getUserCompanyLink function does not found the provided user from the token', async () => {
@@ -122,7 +126,8 @@ describe('Update company - /api/v1/companies', () => {
       .send(mockUpdateCompany);
     expect(status).toEqual(422);
     expect(body).toStrictEqual({
-      message: 'Unprocessable entity error',
+      message: 'User does not exist',
+      language: 'es_mx',
       errors: [
         {
           field: 'userNumber',
@@ -135,8 +140,8 @@ describe('Update company - /api/v1/companies', () => {
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(3);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(4);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an Unprocessable Entity error getUserCompanyLink function does not the link betwen company and user number', async () => {
@@ -153,7 +158,8 @@ describe('Update company - /api/v1/companies', () => {
       .send(mockUpdateCompany);
     expect(status).toEqual(422);
     expect(body).toStrictEqual({
-      message: 'Unprocessable entity error',
+      message: 'Company not linked to user',
+      language: 'es_mx',
       errors: [
         {
           field: 'companyNumber',
@@ -166,8 +172,8 @@ describe('Update company - /api/v1/companies', () => {
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(3);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(4);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an Unprocessable Entity error getCompanyByNumber doest not found the company', async () => {
@@ -185,7 +191,8 @@ describe('Update company - /api/v1/companies', () => {
       .send(mockUpdateCompany);
     expect(status).toEqual(422);
     expect(body).toStrictEqual({
-      message: 'Unprocessable entity error',
+      language: 'es_mx',
+      message: 'Company does not exist',
       errors: [
         {
           field: 'companyNumber',
@@ -198,8 +205,8 @@ describe('Update company - /api/v1/companies', () => {
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(4);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(5);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an Unprocessable Entity when the subscription can not be created on invalid sku plan', async () => {
@@ -219,7 +226,8 @@ describe('Update company - /api/v1/companies', () => {
 
     expect(status).toEqual(422);
     expect(body).toStrictEqual({
-      message: 'Unprocessable entity error',
+      language: 'es_mx',
+      message: 'Subscription has an invalid sku plan for the seller',
       errors: [
         {
           field: 'sku',
@@ -232,8 +240,8 @@ describe('Update company - /api/v1/companies', () => {
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
-    expect(mockExternalResponse).toHaveBeenCalledTimes(5);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(6);
+    mockExternalResponse.mockRestore();
   });
 
   test('throws an External microservice error on update lead status', async () => {
@@ -269,7 +277,8 @@ describe('Update company - /api/v1/companies', () => {
     expect(status).toEqual(500);
     expect(body).toStrictEqual({
       errors: [],
-      message: 'The application has encountered an unknown error',
+      language: 'es_mx',
+      message: 'Se ha producido un error inesperado en el servicio',
       microservice: 'gx-boa-ms-account-provisioning',
     });
 
@@ -278,8 +287,8 @@ describe('Update company - /api/v1/companies', () => {
       to deleteCompany and deleteUserCompanyLInk on
       updateLeadStatus Error
     */
-    expect(mockExternalResponse).toHaveBeenCalledTimes(11);
-    mockExternalResponse.mockReset();
+    expect(mockExternalResponse).toHaveBeenCalledTimes(12);
+    mockExternalResponse.mockRestore();
   });
 
   test('returns a succesful response when the company updated succesfully', async () => {
@@ -310,6 +319,6 @@ describe('Update company - /api/v1/companies', () => {
     expect(body).toStrictEqual({});
 
     expect(mockExternalResponse).toHaveBeenCalledTimes(9);
-    mockExternalResponse.mockReset();
+    mockExternalResponse.mockRestore();
   });
 });

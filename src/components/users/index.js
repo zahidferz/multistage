@@ -5,7 +5,6 @@ import {
 } from 'gx-node-api-errors';
 import * as externalRequest from '~/src/components/utils/externalRequest';
 import userCompanyStatusEnum from '~/src/utils/enums/userCompanyEnum';
-import userErrorsEnum from '~/src/utils/enums/userEnums';
 import { deleteCompany } from '~/src/components/companies';
 import { externalMsBaseUrls } from '~/src/config';
 import {
@@ -14,6 +13,7 @@ import {
   errorResponseHasCreateUser,
   errorResponseHasInexistUser,
 } from './utils';
+import { userErrorsEnum, userStatusNum } from '~/src/utils/enums/userEnums';
 
 const baseUrl = externalMsBaseUrls.users;
 /**
@@ -25,9 +25,12 @@ const baseUrl = externalMsBaseUrls.users;
  * @throws {UnprocessableEntity Error} - when a user is already registered
  * @returns {Promise} - false when no user is found by mobile phone
  */
-async function getUserByMobilePhone({ countryCallingCode, mobilePhone }) {
+async function getUserByMobilePhone(
+  { countryCallingCode, mobilePhone },
+  getUserbyPhoneInfo = false,
+) {
   const encodedCallingCountryCode = encodeURIComponent(countryCallingCode);
-  const endpoint = `/users?countryCallingCode=${encodedCallingCountryCode}&mobilePhone=${mobilePhone}`;
+  const endpoint = `/users?countryCallingCode=${encodedCallingCountryCode}&mobilePhone=${mobilePhone}&getUserbyPhoneInfo=${getUserbyPhoneInfo}`;
 
   try {
     const response = await externalRequest.execute({ baseUrl, endpoint });
@@ -371,6 +374,30 @@ async function eliminateUser({ userNumber }) {
   }
 }
 
+/**
+ * Validates if a user can log in :
+ * - An user exist with the mobile phone given
+ * - The user is active on users ms
+ * @param {Object} data request object to execute the petition
+ * @returns {Promise<Object>} Returns the user  information  to continue  with the process
+ */
+async function validateUserInfoForLogIn(data) {
+  const getUserbyPhoneInfo = true;
+  const response = await getUserByMobilePhone(data, getUserbyPhoneInfo);
+
+  const user = response.data;
+
+  if (user.UserStatusId === userStatusNum.active) {
+    return user;
+  }
+  throw new UnprocessableEntityError(
+    'Unprocessable entity error',
+    'mobilePhone',
+    `${data.countryCallingCode}${data.mobilePhone}`,
+    'InvalidUserStatus',
+  );
+}
+
 export {
   createUser,
   deleteUserCompanyLink,
@@ -382,4 +409,5 @@ export {
   postUser,
   udpateLeadStatus,
   updateUserAsSecure,
+  validateUserInfoForLogIn,
 };

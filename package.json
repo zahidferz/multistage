@@ -64,7 +64,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
     "@hapi/joi": "^17.1.1",
-    "@sentry/node": "^5.15.5",
+    "@sentry/node": "^5.17.0",
     "@types/node": "^14.0.9",
     "applicationinsights": "^1.7.5",
     "axios": "^0.19.2",
@@ -77,7 +77,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-pino-logger": "^5.0.0",
-    "gx-node-api-errors": "^0.2.8",
+    "gx-node-api-errors": "^0.2.12",
     "helmet": "^3.22.0",
     "i": "^0.3.6",
     "jest": "^24.5.0",

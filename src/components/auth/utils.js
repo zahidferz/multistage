@@ -16,5 +16,8 @@ export default function errorReponseHasPasswordError({ data }) {
   if (data.statusCode === 409) {
     return authErrorsEnum.UserAlreadyExist;
   }
+  if (data.error_description === 'Wrong email or password.') {
+    return authErrorsEnum.PasswordError;
+  }
   return 0;
 }

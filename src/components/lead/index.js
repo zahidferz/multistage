@@ -207,7 +207,7 @@ async function validateLeadForConfirmation(sqlmanager, data) {
       'AccountAlreadyConfirmed',
     );
   }
-  if (lead.confirmationCode !== data.confirmationCode) {
+  if (lead.confirmationCode !== String(data.confirmationCode)) {
     throw new UnprocessableEntityError(
       'Unprocessable entity error',
       'confirmationCode',

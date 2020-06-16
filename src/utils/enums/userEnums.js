@@ -1,4 +1,4 @@
-export default {
+const userErrorsEnum = {
   UserNotExist: 10,
   CompanyNotLinkedToUser: 11,
   BranchNotLinkedToUser: 12,
@@ -12,3 +12,10 @@ export default {
   InvalidRole: 22,
   InvalidLeadStatus: 23,
 };
+
+const userStatusNum = {
+  active: 1,
+  suspended: 2,
+  deleted: 3,
+};
+export { userErrorsEnum, userStatusNum };

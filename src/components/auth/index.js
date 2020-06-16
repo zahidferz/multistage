@@ -106,4 +106,62 @@ async function createAccount(data) {
     }
   }
 }
-export { createAccount, introspectToken };
+
+/**
+ * @param {Object} user
+ * @param { Object } signIn
+ * @returns {Object} object to create an account on auth ms
+ */
+function buildLogInObject(user, signIn) {
+  const signInObject = {
+    client_id: authConfig.clientId,
+    username: user.email,
+    password: signIn.password,
+  };
+  return signInObject;
+}
+
+/**
+ * @param {Object} user
+ * @param {Object} signIn
+ * @throws {ExternalMicroserviceError} - any other error from the service
+ * @returns {Promise<Object>} Auth service response if request ends succesfully
+ */
+async function logIn(user, signIn) {
+  const endpoint = '/access_token';
+  const createSignInHeaders = {
+    appid: authConfig.appId,
+    appsecret: authConfig.appSecret,
+  };
+  const body = buildLogInObject(user, signIn);
+
+  try {
+    const response = await externalRequest.execute({
+      baseUrl,
+      endpoint,
+      body,
+      method: 'POST',
+      headers: createSignInHeaders,
+    });
+
+    return response.data;
+  } catch ({ response }) {
+    const expectedAccountCreateErrorCode = errorReponseHasPasswordError(
+      response,
+    );
+
+    switch (expectedAccountCreateErrorCode) {
+      case authErrorsEnum.PasswordError:
+        throw new UnprocessableEntityError(
+          'Unprocessable entity error',
+          'email/password',
+          '',
+          'SignInError',
+        );
+      default:
+        throw new ExternalMicroserviceError();
+    }
+  }
+}
+
+export { createAccount, introspectToken, logIn };

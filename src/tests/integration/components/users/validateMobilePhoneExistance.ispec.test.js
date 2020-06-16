@@ -24,7 +24,7 @@ describe('validateMobilePhoneExistance component', () => {
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });
@@ -45,13 +45,13 @@ describe('validateMobilePhoneExistance component', () => {
     await expect(
       validateMobilePhoneExistance(sqlManager, {
         countryCallingCode: '+1',
-        mobilePhone: '9999999999',
+        mobilePhone: '2345099991',
       }),
     ).rejects.toThrowError(
       new UnprocessableEntityError(
         'Unprocessable entity error',
         'mobilePhone',
-        '9999999999',
+        '2345099991',
         'ExistentUser',
       ),
     );
@@ -69,7 +69,7 @@ describe('getSignUpByMobilePhone datastore', () => {
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });

@@ -15,6 +15,7 @@ resources:
     type: git 
     ref: master #branch name
 
-
 extends:
   template: NodePipeline.yaml@NodeYaml
+  parameters:
+    branch: $(SourceBranchName)

@@ -1,0 +1,17 @@
+resources:      
+  repositories: 
+  - repository: gx-devops-yamls
+    name: gx-devops-yamls
+    type: git 
+    ref: master #branch name
+
+trigger: none
+
+jobs:
+- job: Build
+  displayName: 'Build WebApp1'
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - template: azure-pipelines.yaml@gx-devops-yamls

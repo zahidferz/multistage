@@ -1,0 +1,20 @@
+
+name: $(SourceBranchName)_$(date:yyyyMMdd)
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+trigger:
+  branches:
+    include:
+    - '*'
+
+resources:      
+  repositories: 
+  - repository: NodeYaml
+    name: gx-devops-yamls/NodeYaml
+    type: git 
+    ref: master #branch name
+
+
+extends:
+  template: NodePipeline.yaml@NodeYaml

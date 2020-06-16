@@ -3,6 +3,11 @@ name: $(SourceBranchName)_$(date:yyyyMMdd)
 pool:
   vmImage: 'Ubuntu-16.04'
 
+trigger:
+  branches:
+    include:
+    - '*'
+
 resources:      
   repositories: 
   - repository: NodeYaml
@@ -10,6 +15,6 @@ resources:
     type: git 
     ref: master #branch name
 
-trigger: none
+
 extends:
   template: NodePipeline.yaml@NodeYaml

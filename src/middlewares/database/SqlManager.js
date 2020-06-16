@@ -26,6 +26,7 @@ const config = {
   requestTimeout: 30000,
   options: {
     encrypt: true,
+    enableArithAbort: true,
     connectTimeout: 30000,
     appName: 'gx-boa-ms-account-provisioning',
   },

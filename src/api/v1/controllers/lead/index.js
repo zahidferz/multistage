@@ -10,7 +10,7 @@ import {
   validateMobilePhoneSchema,
 } from '~/src/api/v1/controllers/lead/schemas';
 import {
-  confirmLead,
+  deleteLead,
   generateConfirmationCode,
   getLeadByMobilePhone,
   insertLead,
@@ -191,7 +191,7 @@ async function confirmLeadController(req, res, next) {
       ...user,
       password: leadInformation.password,
     });
-    await confirmLead(sqlmanager, leadInformation);
+    await deleteLead(sqlmanager, leadInformation);
 
     const userAsSecure = await updateUserAsSecure(user);
 

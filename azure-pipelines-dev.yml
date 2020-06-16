@@ -134,7 +134,7 @@ stages:
     - task: DockerCompose@0
       displayName: 'Migration local sql-server'
       inputs:
-        dockerComposeFile: '$(System.DefaultWorkingDirectory)/src/db/docker-compose.testdb.yml'
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/db/docker-compose.testdb.yml'
         dockerComposeCommand: 'up --build -d'
     - task: Bash@3
       inputs:

@@ -26,7 +26,7 @@ describe('validateEmailExistance component', () => {
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });
@@ -65,7 +65,7 @@ describe('getLeadByEmailSp datastore', () => {
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });

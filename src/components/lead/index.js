@@ -1,12 +1,13 @@
 import { UnprocessableEntityError, NotFoundError } from 'gx-node-api-errors';
 import {
+  deleteOldUncofirmedLeadsSp,
+  deleteLeadByMobilePhoneSp,
   insertLeadSp,
   getLeadByConfirmationCodeSp,
   getLeadByMobilePhoneSp,
   getLeadByEmailSp,
   getRecentUncofirmedLeadsSp,
   confirmLeadSp,
-  deleteOldUncofirmedLeadsSp,
 } from '~/src/components/lead/datastores';
 import { excuteSp } from '~/src/components/utils/db';
 
@@ -148,6 +149,19 @@ async function confirmLead(sqlmanager, data) {
 }
 
 /**
+ * Deletes a lead by mobile phone. Used after
+ * confirmation code validation
+ * @export
+ * @param {Object} sqlmanager
+ * @param {object} data
+ * @returns {Promise<Object>} With the updated object
+ */
+async function deleteLead(sqlmanager, data) {
+  const lead = await excuteSp(sqlmanager, deleteLeadByMobilePhoneSp, data);
+  return lead;
+}
+
+/**
  * Deletes leads that are uncofirmed
  * and more or equal than X days of age
  * determined by the env var
@@ -171,7 +185,6 @@ async function deleteOldUncofirmedLeads(sqlmanager) {
  */
 async function getRecentUnconfirmedLeads(sqlmanager) {
   const unconfirmedDays = leads.daysRecentUnconfirmedLeadsGet;
-
   const recentUncofirmedLeads = await excuteSp(
     sqlmanager,
     getRecentUncofirmedLeadsSp,
@@ -207,7 +220,7 @@ async function validateLeadForConfirmation(sqlmanager, data) {
       'AccountAlreadyConfirmed',
     );
   }
-  if (lead.confirmationCode !== data.confirmationCode) {
+  if (lead.confirmationCode !== String(data.confirmationCode)) {
     throw new UnprocessableEntityError(
       'Unprocessable entity error',
       'confirmationCode',
@@ -220,6 +233,7 @@ async function validateLeadForConfirmation(sqlmanager, data) {
 
 export {
   confirmLead,
+  deleteLead,
   deleteOldUncofirmedLeads,
   insertLead,
   generateConfirmationCode,

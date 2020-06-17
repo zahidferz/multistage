@@ -1,4 +1,4 @@
-import userErrorsEnum from '~/src/utils/enums/userEnums';
+import { userErrorsEnum } from '~/src/utils/enums/userEnums';
 
 /**
  * Evaluates if the response from users have

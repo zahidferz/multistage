@@ -12,12 +12,13 @@ pr: none
 
 resources:      
   repositories: 
-  - repository: NodeYaml
-    name: gx-devops-yamls/NodeYaml
-    type: git 
+  - repository: gx-devops-yamls
+    name: gestionix/gx-devops-yamls
+    type: github
+    endpoint: gx-github
     ref: master #branch name
 
 extends:
-  template: NodePipeline.yaml@NodeYaml
+  template: Node/Node.yaml@gx-devops-yamls
 
 

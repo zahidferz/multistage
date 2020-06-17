@@ -223,13 +223,77 @@ async function mockUserDoNotExistErrorResponse() {
   });
 }
 
+/**
+ * Returns a mocked response for
+ * log in account on auth microservice
+ * @returns {Promise}
+ */
+async function mockLogInResponse() {
+  const mockResponse = {
+    data: {
+      access_token: 'To4TqbeMjKdeAADaEIUUyPF41I5ix1KV',
+      refresh_token: 'XNkcUmSKl0aqOv60eI_wppEQ4rF2HHuz_11EStlRhz_PT',
+      id_token:
+        'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJEYzJORUpGUWpRelJUaEJNRVl6UWpsRE9UYzFSVVJDUlRSR1JFTXdSVUkzUlRKRU9UVTFSUSJ9.eyJodHRwczovL3VzZXJfbWV0YWRhdGEvIjp7InVzZXJOdW1iZXIiOiIxMTc2MCIsImNvdW50cnlDb2RlIjoiTVhOIn0sIm5pY2tuYW1lIjoiZ3IueW9jZWxpbithcG1zMTEiLCJuYW1lIjoiWW9jZWxpbiBHYXJjaWEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvNWM5NWFiNGUxZjE1M2M4YTAzZDRjNjVjZWQzODI3ZDM_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZ5Zy5wbmciLCJ1cGRhdGVkX2F0IjoiMjAyMC0wNi0xNVQxNjoxMTowOS43ODNaIiwiZW1haWwiOiJnci55b2NlbGluK2FwbXMxMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6Ly9nZXN0aW9uaXguYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDJGRjEzRjZDLUVGNEEtNEUzQS04OTU3LTU1QzdDNEU2MzY3NSIsImF1ZCI6ImtXN0hseXRmQWhNa0I1NEhkVk4xNEFXM1M0bUYxeE11IiwiaWF0IjoxNTkyMjM3NDY5LCJleHAiOjE1OTIyNzM0Njl9.fQ2HERepHZVFUL34Y2YpB7x_IWhBDNNjmU7h6BKNXsuTJRL6ozywVQU2GT2W2VW6Zs-0HabLmsl_XGJyxJOuMHhhHg0LSY3S5AuZqsX-4yq5Mu0-xb4iN0fTXrMdnTXinESPsgy0jVds8zgrykvADawOjDqzE94BwdRmqjdscIOJyS2oMCCE2PkgNy9-Wlmm0Pg5gWuOWPS8BcKrXwc6bsz6QhdXfn9p1iQ8DOjp118TTTVLilulVsg0me06waanoIbuM6anTBQ2VfP1qVnD3nySnGKkONLv_lgn2-mioHb2y5DEf6qOHNngFmxROIwhwCLjF1risylLD9fMlrydHA',
+      scope: 'openid profile email address phone offline_access',
+      expires_in: 86400,
+      token_type: 'Bearer',
+    },
+  };
+  return new Promise((resolve) => {
+    resolve(mockResponse);
+  });
+}
+
+/**
+ * Returns a mocked error for
+ * wrong password
+ * @returns {Promise}
+ */
+async function mockLogInErrorResponse() {
+  const mockResponse = {
+    response: {
+      data: {
+        error: 'invalid_grant',
+        error_description: 'Wrong email or password.',
+      },
+    },
+  };
+  return new Promise((resolve, reject) => {
+    reject(mockResponse);
+  });
+}
+
+/**
+ * Returns a mocked error for
+ * authorization missing
+ * @returns {Promise}
+ */
+async function mockAuthErrorTranslateResponse() {
+  const mockResponse = [
+    {
+      errorCode: 14,
+      errorMessage: 'Authorization missing for service',
+      errorType: 'error',
+      field: 'authorization',
+      fieldValue: null,
+    },
+  ];
+  return new Promise((resolve, reject) => {
+    reject(mockResponse);
+  });
+}
+
 export {
   mockAuthorizationError,
+  mockAuthErrorTranslateResponse,
   mockCreateAccountResponse,
   mockCreateAccountConfictErrorResponse,
   mockCreateAccountPasswordErrorResponse,
   mockExternalAuthNotExpectedError,
   mockIntrospectTokenResponse,
+  mockLogInResponse,
+  mockLogInErrorResponse,
   mockUserDoNotExistErrorResponse,
   userCreated,
 };

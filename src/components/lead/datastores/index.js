@@ -116,6 +116,24 @@ async function deleteOldUncofirmedLeadsSp(connection, data) {
 }
 
 /**
+ * Delete a lead by mobile phone
+ * @param {Object} connection mssql connection
+ * @returns {Promise<Object>} Deleted lead
+ */
+async function deleteLeadByMobilePhoneSp(connection, data) {
+  try {
+    const result = await connection
+      .request()
+      .input('countryCallingCode', data.countryCallingCode)
+      .input('mobilePhone', data.mobilePhone)
+      .execute('DeleteLeadByMobilePhone');
+    return result.recordset;
+  } catch (error) {
+    throw new DbError(error.message);
+  }
+}
+
+/**
  * Get leads that are exactly X
  * days of age
  * @param {Object} connection mssql connection
@@ -135,6 +153,7 @@ async function getRecentUncofirmedLeadsSp(connection, data) {
 
 export {
   confirmLeadSp,
+  deleteLeadByMobilePhoneSp,
   deleteOldUncofirmedLeadsSp,
   getLeadByConfirmationCodeSp,
   getLeadByMobilePhoneSp,

@@ -16,11 +16,7 @@ describe('Sign Up Controller', () => {
   });
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '5527258180',
-      countryCallingCode: '+52',
-    });
-    await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });

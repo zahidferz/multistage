@@ -29,7 +29,7 @@ async function getDBFlywayLastMigration(connection) {
 }
 
 async function getLastMigrationFile() {
-  const folder = path.join(process.cwd(), 'src/db/migrations/versioned');
+  const folder = path.join(process.cwd(), '/db/migrations/versioned');
   const files = fs.readdirSync(folder);
   const maped = files.map((file) => {
     const firstSplit = file.split('.');

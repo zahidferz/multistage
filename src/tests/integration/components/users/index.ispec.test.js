@@ -11,8 +11,12 @@ import {
   udpateLeadStatus,
   postUser,
   updateUserAsSecure,
+  getUserByMobilePhone,
 } from '~/src/components/users';
 import {
+  mockErrorGetUserByPhoneRequest,
+  mockGetUserInfoExistedRequest,
+  mockGetUserInfoInexistedRequest,
   mockExternalUsersNotExpectedError,
   mockExistentUserCompanyLink,
   mockNonExistentUserRequest,
@@ -286,6 +290,67 @@ describe('updateUserAsSecure function', () => {
     ).resolves.toStrictEqual({
       userNumber: 20,
       userSecurityStatusId: 1,
+    });
+    mockExternalResponse.mockReset();
+  });
+});
+
+describe('getUserByMobilePhone function', () => {
+  test('throws a mocked error when search for a mobilePhone that already exists on user ms', async () => {
+    const mockExternalResponse = jest
+      .spyOn(externalRequest, 'execute')
+      .mockImplementation(mockErrorGetUserByPhoneRequest);
+
+    await expect(
+      getUserByMobilePhone({
+        countryCallingCode: '+55',
+        mobilePhone: '15527258173',
+      }),
+    ).rejects.toThrowError(
+      new UnprocessableEntityError(
+        'Unprocessable entity error',
+        'mobilePhone',
+        '15527258173',
+        'ExistentUser',
+      ),
+    );
+    mockExternalResponse.mockReset();
+  });
+  test('Return false when require user information but it does not exist', async () => {
+    const mockExternalResponse = jest
+      .spyOn(externalRequest, 'execute')
+      .mockImplementation(mockGetUserInfoInexistedRequest);
+
+    await expect(
+      getUserByMobilePhone(
+        {
+          countryCallingCode: '+55',
+          mobilePhone: '15527258173',
+        },
+        true,
+      ),
+    ).resolves.toStrictEqual({ data: false });
+    mockExternalResponse.mockReset();
+  });
+  test('Return user info when require user information', async () => {
+    const mockExternalResponse = jest
+      .spyOn(externalRequest, 'execute')
+      .mockImplementation(mockGetUserInfoExistedRequest);
+
+    await expect(
+      getUserByMobilePhone(
+        {
+          countryCallingCode: '+55',
+          mobilePhone: '15527258173',
+        },
+        true,
+      ),
+    ).resolves.toStrictEqual({
+      data: {
+        mobilePhone: '15527258173',
+        email: 'gr.yocelin+apms11@gmail.com',
+        UserStatusId: 1,
+      },
     });
     mockExternalResponse.mockReset();
   });

@@ -13,7 +13,7 @@ describe('Validate mobile phone controller - /users?countryCallingCode=:countryC
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });
@@ -21,7 +21,7 @@ describe('Validate mobile phone controller - /users?countryCallingCode=:countryC
   test('throws an error when a lead already has a mobile phone registered', async () => {
     const { status, body } = await request(app)
       .get('/api/v1/leads')
-      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '9999999999' });
+      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '2345099991' });
     expect(status).toEqual(422);
     expect(body).toStrictEqual({
       errors: [
@@ -31,7 +31,7 @@ describe('Validate mobile phone controller - /users?countryCallingCode=:countryC
             'There is an existent user with the provided mobile phone',
           errorType: 'error',
           field: 'mobilePhone',
-          fieldValue: '9999999999',
+          fieldValue: '2345099991',
         },
       ],
       message: 'There is an existent user with the provided mobile phone',
@@ -43,7 +43,7 @@ describe('Validate mobile phone controller - /users?countryCallingCode=:countryC
   test('pass when a lead mobile phone is not already registered', async () => {
     const { status, body } = await request(app)
       .get('/api/v1/leads')
-      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '9999999991' });
+      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '2345099998' });
     expect(status).toEqual(200);
     expect(body).toBe(false);
   });
@@ -78,7 +78,7 @@ describe('getConfirmationCodeController', () => {
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });
@@ -114,10 +114,10 @@ describe('getConfirmationCodeController', () => {
     const response = await request(app)
       .get(endpoint)
       .set('Accept', 'application/json')
-      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '6666666666' });
+      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '2345099990' });
     expect(response.status).toBe(404);
     expect(response.body).toStrictEqual({
-      message: 'Not found Error',
+      message: 'Lead does not exist',
       errors: [
         {
           field: null,
@@ -136,7 +136,7 @@ describe('getConfirmationCodeController', () => {
     const response = await request(app)
       .get(endpoint)
       .set('Accept', 'application/json')
-      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '9999999999' });
+      .set({ 'Country-Calling-Code': '+1', 'Mobile-Phone': '2345099991' });
     expect(response.status).toBe(200);
   });
 });
@@ -150,7 +150,7 @@ describe('confirmLeadController', () => {
 
   afterAll(async () => {
     await dummyRemoveLead({
-      mobilePhone: '9999999999',
+      mobilePhone: '2345099991',
       countryCallingCode: '+1',
     });
   });
@@ -159,24 +159,25 @@ describe('confirmLeadController', () => {
     const response = await request(app)
       .post(endpoint)
       .send({
-        confirmationCode: '0000',
+        confirmationCode: '0001',
         agreedTermsAndConditions: true,
       });
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({
-      message: 'Invalid info for process',
+      language: 'es_mx',
+      message: 'mobilePhone es requerido',
       errors: [
         {
           field: 'mobilePhone',
           errorCode: 1,
           errorType: 'error',
-          errorMessage: '{mobilePhone} is required',
+          errorMessage: 'mobilePhone es requerido',
         },
         {
           field: 'countryCallingCode',
           errorCode: 1,
           errorType: 'error',
-          errorMessage: '{countryCallingCode} is required',
+          errorMessage: 'countryCallingCode es requerido',
         },
       ],
       microservice: 'gx-boa-ms-account-provisioning',
@@ -187,19 +188,20 @@ describe('confirmLeadController', () => {
     const response = await request(app)
       .post(endpoint)
       .send({
-        mobilePhone: '3333333333',
+        mobilePhone: '2345099990',
         countryCallingCode: '+52',
-        confirmationCode: '0000',
+        confirmationCode: '0001',
         agreedTermsAndConditions: true,
       });
 
     expect(response.status).toBe(404);
     expect(response.body).toStrictEqual({
-      message: 'Not found error',
+      language: 'es_mx',
+      message: 'Lead does not exist',
       errors: [
         {
           field: 'mobilePhone',
-          fieldValue: '+523333333333',
+          fieldValue: '+522345099990',
           errorCode: 27,
           errorType: 'error',
           errorMessage: 'Lead does not exist',
@@ -213,9 +215,9 @@ describe('confirmLeadController', () => {
     const response = await request(app)
       .post(endpoint)
       .send({
-        mobilePhone: '9999999999',
+        mobilePhone: '2345099991',
         countryCallingCode: '+1',
-        confirmationCode: '0000',
+        confirmationCode: '0001',
         agreedTermsAndConditions: true,
       });
 

@@ -96,4 +96,24 @@ export default {
     errorMessage:
       'The specified confirmationCode is invalid for he provided lead',
   },
+  InvalidUserStatus: {
+    errorCode: 29,
+    errorType: 'error',
+    errorMessage: 'Only valid users can make signing processes',
+  },
+  SignInError: {
+    errorCode: 30,
+    errorType: 'error',
+    errorMessage: 'Wrong email or password',
+  },
+  InvalidTaxIdPattern: {
+    errorCode: 31,
+    errorType: 'error',
+    errorMessage: 'TaxId does not have a valid pattern',
+  },
+  InvalidTaxIdLength: {
+    errorCode: 32,
+    errorType: 'error',
+    errorMessage: 'TaxId does not have a valid length',
+  },
 };

@@ -1,5 +1,14 @@
 import axios from 'axios';
 
+/*
+  Error codes that are standarized across
+  microservices
+*/
+const msErrorCodes = {
+  InvalidPattern: 3,
+  InvalidLength: 5,
+};
+
 /**
  * Builds a request and gets the response from and endpoint
  * GET request method by default.
@@ -36,4 +45,4 @@ async function execute(requestParameters) {
   return response;
 }
 // eslint-disable-next-line
-export { execute };
+export { execute, msErrorCodes };

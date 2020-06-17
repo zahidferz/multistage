@@ -50,7 +50,7 @@ async function sendConfirmationCodeController(req, res, next) {
       );
     }
     await sendConfirmationCode(
-      `${lead.countryCallingCode}1${lead.mobilePhone}`,
+      `${lead.countryCallingCode}${lead.mobilePhone}`,
       lead.confirmationCode,
     );
 
@@ -120,14 +120,15 @@ async function createLeadController(req, res, next) {
 
     if (dataToCreateLead.sendConfirmationCode) {
       await sendConfirmationCode(
-        `${newSignUpRegister.countryCallingCode}${newSignUpRegister.mobilePhone}`,
+        newSignUpRegister,
         newSignUpRegister.confirmationCode,
       );
     }
     if (dataToCreateLead.sendSlackNotification) {
       await notifyUserRegistered(dataToCreateLead);
     }
-    return res.status(201).send(newSignUpRegister);
+
+    return res.status(201).send();
   } catch (error) {
     return returnErrorDependingOnStatusCodeExistence(error, res, next);
   }
@@ -203,9 +204,7 @@ async function confirmLeadController(req, res, next) {
     );
 
     if (sendWhatsAppNotification) {
-      await sendNewUserWelcomeMessage(
-        `${leadInformation.countryCallingCode}${leadInformation.mobilePhone}`,
-      );
+      await sendNewUserWelcomeMessage(leadInformation);
     }
 
     if (sendSlackNotification) {

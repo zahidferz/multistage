@@ -143,12 +143,11 @@ describe('deleteOldUncofirmedLeads function', () => {
 
 describe('getRecentUncofirmedLeads function', () => {
   const unconfirmedDays = leads.daysRecentUnconfirmedLeadsGet;
-  let userInformation;
   afterAll(async () => {
-    await dummyRemoveLead(userInformation);
+    await dummyRemoveLead(insertLeadDummyData);
   });
   test(`get 0 records that are ${unconfirmedDays} days old`, async () => {
-    userInformation = await insertLead(sqlManager, insertLeadDummyData);
+    await insertLead(sqlManager, insertLeadDummyData);
     const recentUnconfirmedLeads = await getRecentUnconfirmedLeads(sqlManager);
     expect(recentUnconfirmedLeads).toHaveLength(0);
   });
@@ -156,8 +155,9 @@ describe('getRecentUncofirmedLeads function', () => {
     await dummyLeadSetToXDaySignUpAge({
       mobilePhone: '5555555555',
       countryCallingCode: '+52',
-      daysSinceSignUp: 3,
+      daysSinceSignUp: unconfirmedDays,
     });
+
     const recentUnconfirmedLeads = await getRecentUnconfirmedLeads(sqlManager);
     expect(recentUnconfirmedLeads).toHaveLength(1);
   });

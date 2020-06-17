@@ -52,11 +52,13 @@ async function dummyLeadSetToXDaySignUpAge({
     const connection = await createDbConnection(sqlManager);
     const dateXDaysOld = moment()
       .subtract(daysSinceSignUp, 'days')
-      .format('YYYY-MM-DDTHH:mm:ss.SSS');
+      .toISOString();
+
     const result = await connection.request().query(`
     UPDATE Lead Set SignUpDate = '${dateXDaysOld}' 
       WHERE MobilePhone = '${mobilePhone}'
       AND CountryCallingCode ='${countryCallingCode}';
+
     `);
     return result;
   } catch (error) {

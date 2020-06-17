@@ -308,7 +308,8 @@ async function updateUserAsSecure({ userNumber }) {
 }
 
 /**
- * Create new user object
+ * Create new user object as masterAdmin
+ * role
  * @export
  * @param {object} data
  * @returns {Object} Build user object
@@ -321,6 +322,7 @@ function buildCreateUserObject(data) {
     countryCallingCode: data.countryCallingCode,
     mobilePhone: data.mobilePhone,
     confirmationCode: data.confirmationCode,
+    role: 'masterAdmin',
     leadStatus: 'pendingCompanyCreation',
   };
 }

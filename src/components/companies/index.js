@@ -5,8 +5,9 @@ import {
 import * as externalRequest from '~/src/components/utils/externalRequest';
 import {
   errorResponseHasInexistentCompany,
-  errorResponseTaxIdAlreadyExist,
+  errorResponseInsertCompanyHasExpectedError,
 } from './utils';
+import errorEnum from '~/src/utils/enums/companiesEnums';
 import { externalMsBaseUrls } from '~/src/config';
 
 const baseUrl = externalMsBaseUrls.companies;
@@ -63,17 +64,31 @@ async function insertCompany(company) {
     });
     return response.data;
   } catch ({ response }) {
-    const taxIdAlreadyExist = errorResponseTaxIdAlreadyExist(response);
-    switch (taxIdAlreadyExist) {
-      case false:
-        throw new ExternalMicroserviceError();
-      default:
+    const errorCode = errorResponseInsertCompanyHasExpectedError(response);
+    switch (errorCode) {
+      case errorEnum.AlreadyExistentTaxId:
         throw new UnprocessableEntityError(
           'Unprocessable entity error',
           'taxId',
           company.taxId,
           'TaxIdAlreadyExist',
         );
+      case errorEnum.InvalidPattern:
+        throw new UnprocessableEntityError(
+          'Unprocessable entity error',
+          'taxId',
+          company.taxId,
+          'InvalidTaxIdPattern',
+        );
+      case errorEnum.InvalidLength:
+        throw new UnprocessableEntityError(
+          'Unprocessable entity error',
+          'taxId',
+          company.taxId,
+          'InvalidLength',
+        );
+      default:
+        throw new ExternalMicroserviceError();
     }
   }
 }

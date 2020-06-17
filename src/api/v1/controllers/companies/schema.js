@@ -4,8 +4,10 @@ function companySchema() {
   return Joi.object().keys({
     company: Joi.object().keys({
       taxId: Joi.string().required(),
-      legalName: Joi.string().required(),
-      commercialName: Joi.string(),
+      legalName: Joi.string()
+        .min(3)
+        .required(),
+      commercialName: Joi.string().min(3),
       companyDataLocalized: Joi.object().keys({
         regimenFiscalNombre: Joi.string(),
         regimenFiscalCodigo: Joi.string(),
@@ -38,10 +40,16 @@ function updateCompanySchema() {
         planSku: Joi.string().required(),
         registry: Joi.object()
           .keys({
-            businessProfileActivity: Joi.string(),
-            businessSizeEmployees: Joi.string(),
-            businessBiggestProblem: Joi.string(),
+            businessProfileActivity: Joi.string().required(),
+            businessSizeEmployees: Joi.number()
+              .integer()
+              .positive()
+              .required(),
+            businessBiggestProblem: Joi.string()
+              .max(1000)
+              .required(),
           })
+          .required()
           .unknown(true),
         urls: Joi.object()
           .keys({})

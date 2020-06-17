@@ -5,6 +5,11 @@ const mockUpdateCompany = {
     createdIp: '0.0.0.0',
     createdFrom: 'account-provisioning.gestionix.com',
     createdBy: 'account-provisioning.gestionix.com',
+    registry: {
+      businessProfileActivity: 'Servicios',
+      businessSizeEmployees: '2',
+      businessBiggestProblem: 'asdfasdfsdfasdfasdf',
+    },
   },
   seller: {
     sellerId: '1',

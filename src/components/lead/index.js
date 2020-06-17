@@ -185,7 +185,6 @@ async function deleteOldUncofirmedLeads(sqlmanager) {
  */
 async function getRecentUnconfirmedLeads(sqlmanager) {
   const unconfirmedDays = leads.daysRecentUnconfirmedLeadsGet;
-
   const recentUncofirmedLeads = await excuteSp(
     sqlmanager,
     getRecentUncofirmedLeadsSp,

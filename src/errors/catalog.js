@@ -106,4 +106,14 @@ export default {
     errorType: 'error',
     errorMessage: 'Wrong email or password',
   },
+  InvalidTaxIdPattern: {
+    errorCode: 31,
+    errorType: 'error',
+    errorMessage: 'TaxId does not have a valid pattern',
+  },
+  InvalidTaxIdLength: {
+    errorCode: 32,
+    errorType: 'error',
+    errorMessage: 'TaxId does not have a valid length',
+  },
 };

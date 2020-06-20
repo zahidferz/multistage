@@ -1,5 +1,5 @@
 ![](https://github.com/zahidferz/multistage/workflows/Version/badge.svg)
-![](https://runkit.io/rubbaboy/byob/branches/master/zahidferz/multistage/time)
+![Version](https://github.com/zahidferz/multistage/workflows/Version/badge.svg?event=project)
 
 <br />
 <p align="center">

@@ -1,4 +1,4 @@
-![](https://github.com/zahidferz/multistage/workflows/Version/bagge.svg)
+![](https://github.com/zahidferz/multistage/workflows/Version/badge.svg)
 
 <br />
 <p align="center">

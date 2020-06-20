@@ -1,0 +1,20 @@
+name: Version
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build:
+    # Job name is Greeting
+    name: GetVersion
+    # This job runs on Linux
+    runs-on: ubuntu-latest
+    steps:
+      # This step uses GitHub's hello-world-javascript-action: https://github.com/actions/hello-world-javascript-action
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: get-directory
+        run: pwsh
+      - name: list-directory
+        run: ls
+      - name: get-npm-version
+        run: jq -r .version package.json

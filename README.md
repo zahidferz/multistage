@@ -1,3 +1,5 @@
+![](https://github.com/zahidferz/multistage/workflows/Version/bagge.svg)
+
 <br />
 <p align="center">
   <a href="https://chain.inc">

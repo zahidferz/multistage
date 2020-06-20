@@ -12,7 +12,10 @@ jobs:
       # This step uses GitHub's hello-world-javascript-action: https://github.com/actions/hello-world-javascript-action
       - name: get-directory
         run: pwsh
+        working-directory: /
       - name: list-directory
         run: ls
+        working-directory: /
       - name: get-npm-version
         run: jq -r .version package.json
+        working-directory: /

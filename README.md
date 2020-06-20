@@ -1,4 +1,5 @@
 ![](https://github.com/zahidferz/multistage/workflows/Version/badge.svg)
+![](https://runkit.io/rubbaboy/byob/branches/master/zahidferz/multistage/time)
 
 <br />
 <p align="center">

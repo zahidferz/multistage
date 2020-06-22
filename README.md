@@ -1,4 +1,5 @@
-![](https://github.com/zahidferz/multistage/workflows/Version/bagge.svg)
+![](https://github.com/zahidferz/multistage/workflows/Version/badge.svg)
+![Version](https://github.com/zahidferz/multistage/workflows/Version/badge.svg?event=project)
 
 <br />
 <p align="center">

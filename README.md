@@ -1,4 +1,4 @@
-![](https://github.com/zahidferz/multistage/workflows/Version/badge.svg)
+[![Build Status](//_apis/build/status/?branchName=master)](//_build/latest?definitionId=&branchName=develop) \n
 ![Version](https://github.com/zahidferz/multistage/workflows/Version/badge.svg?event=project)
 
 <br />

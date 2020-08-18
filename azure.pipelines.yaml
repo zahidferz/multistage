@@ -16,7 +16,7 @@ resources:
     name: gestionix/gx-devops-yamls
     type: github
     endpoint: gx-github
-    ref: master #branch name
+    ref: work #branch name
 
 extends:
   template: Node/Node.yaml@gx-devops-yamls
